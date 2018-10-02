@@ -1,0 +1,9 @@
+
+com.pjs.client
+com.pjs.client.reqresp
+com.pjs.config
+com.pjs.core
+com.pjs.core.model
+com.pjs.requestor
+com.pjs.requestor.builder
+com.pjs.requestor.factory
