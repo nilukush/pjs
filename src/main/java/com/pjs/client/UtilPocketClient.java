@@ -1,18 +1,28 @@
 package com.pjs.client;
 
-import com.pjs.client.reqresp.SavedUrlsRequest;
+import com.pjs.client.reqresp.RequestAuthorize;
+import com.pjs.client.reqresp.RequestBase;
+import com.pjs.client.reqresp.RequestLogin;
+import com.pjs.client.reqresp.RequestSavedUrls;
 import com.pjs.core.GsonSingleton;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 
-public class UtilPocketClient {
+class UtilPocketClient {
     private static final Logger LOGGER = LogManager.getLogger(UtilPocketClient.class);
-    private static String baseEndpoint = "https://getpocket.com/";
-    private static String pocketApiVersion = "v3";
+    private static final String baseEndpoint = "https://getpocket.com/";
+    private static final String pocketApiVersion = "v3";
 
+    /**
+     *
+     * @param pocketApiName
+     * @return
+     * @throws URISyntaxException
+     */
     public static URI getUri(String pocketApiName) throws URISyntaxException {
         URI uri = null;
         try {
@@ -25,9 +35,40 @@ public class UtilPocketClient {
         return uri;
     }
 
-    public static String getSavedUrlsRequest(String consumerKey, String accessToken, SavedUrlsRequest savedUrlsRequest) {
-        savedUrlsRequest.setConsumer_key(consumerKey);
-        savedUrlsRequest.setAccess_token(accessToken);
-        return GsonSingleton.getInstance().toJson(savedUrlsRequest);
+    /**
+     *
+     * @param consumerKey
+     * @param requestSavedUrls
+     * @return
+     */
+    public static String getRequestSavedUrls(String consumerKey, @org.jetbrains.annotations.NotNull RequestSavedUrls requestSavedUrls) {
+        setConsumerKey(consumerKey, requestSavedUrls);
+        return GsonSingleton.getInstance().toJson(requestSavedUrls);
+    }
+
+    private static void setConsumerKey(String consumerKey, @NotNull RequestBase requestBase) {
+        requestBase.setConsumer_key(consumerKey);
+    }
+
+    /**
+     *
+     * @param consumerKey
+     * @param requestAuthorize
+     * @return
+     */
+    public static String getRequestAuthorize(String consumerKey, @org.jetbrains.annotations.NotNull RequestAuthorize requestAuthorize) {
+        setConsumerKey(consumerKey, requestAuthorize);
+        return GsonSingleton.getInstance().toJson(requestAuthorize);
+    }
+
+    /**
+     *
+     * @param consumerKey
+     * @param requestLogin
+     * @return
+     */
+    public static String getRequestLogin(String consumerKey, RequestLogin requestLogin) {
+        setConsumerKey(consumerKey, requestLogin);
+        return GsonSingleton.getInstance().toJson(requestLogin);
     }
 }

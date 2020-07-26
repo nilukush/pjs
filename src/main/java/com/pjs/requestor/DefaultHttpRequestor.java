@@ -12,6 +12,9 @@ import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.net.URI;
 
+/**
+ *
+ */
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class DefaultHttpRequestor extends HttpRequestor {
@@ -34,7 +37,8 @@ public class DefaultHttpRequestor extends HttpRequestor {
     @Override
     public String post(URI uri, String body) {
         try {
-            return Request.Post(uri).useExpectContinue().version(clientConfig.httpVersion).bodyString(body, clientConfig.contentType).execute()
+            return Request.Post(uri).useExpectContinue().version(clientConfig.httpVersion).setHeader("X-Accept", "application/json").bodyString(body, clientConfig.contentType)
+                    .execute()
                     .returnContent().asString(CharsetUtils.lookup(clientConfig.charset));
         } catch (IOException e) {
             LOGGER.error("Failed to execute post reqresp [uri] " + uri + " [body] " + body);

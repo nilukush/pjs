@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 @Data
-public class SavedUrlsResponse {
+public class ResponseSavedUrls {
     private Integer status;
-    private List<Map<String, PocketItem>> pocketItems;
+    private List<Map<String, PocketItem>> list;
 }
