@@ -6,13 +6,36 @@
  * user guide available at https://docs.gradle.org/4.10.2/userguide/java_library_plugin.html
  */
 
+buildscript {
+    repositories {
+        jcenter()
+        maven {
+            url 'https://artifcatorymewx.jfrog.io/artifactory/gradle-release'
+            credentials {
+                username = "${artifactory_user}"
+                password = "${artifactory_password}"
+            }
+            name = "maven-main-cache"
+        }
+    }
+    dependencies {
+        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:latest.release"
+    }
+}
+
 plugins {
     // Apply the java-library plugin to add support for Java Library
     id 'java-library'
 
     // lombok
     id 'io.franzbecker.gradle-lombok' version '1.14'
+    id 'maven-publish'
 }
+
+apply plugin: 'java'
+apply plugin: 'groovy'
+apply plugin: 'maven'
+apply plugin: "com.jfrog.artifactory"
 
 dependencies {
     // This dependency is exported to consumers, that is to say found on their compile classpath.
@@ -54,6 +77,8 @@ repositories {
     maven {
         url "http://www.evosuite.org/m2"
     }
+
+    add buildscript.repositories.getByName("maven-main-cache")
 }
 
 lombok {
@@ -61,11 +86,35 @@ lombok {
     sha256 = ""
 }
 
+group = 'com.pjs'
 version = '0.1.0'
 
 jar {
     manifest {
         attributes('Implementation-Title': project.name,
                 'Implementation-Version': project.version)
+    }
+}
+
+artifactory {
+    contextUrl = "${artifactory_contextUrl}"
+    publish {
+        repository {
+            repoKey = 'gradle-release-local'
+            username = "${artifactory_user}"
+            password = "${artifactory_password}"
+            maven = true
+        }
+        defaults {
+            publications('mavenJava')
+        }
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
     }
 }

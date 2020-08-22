@@ -9,8 +9,8 @@ import lombok.Data;
 import org.jetbrains.annotations.NotNull;
 
 import java.net.URISyntaxException;
+import java.util.Objects;
 
-@Data
 public class PocketClient {
     private ClientConfig clientConfig = null;
 
@@ -32,7 +32,7 @@ public class PocketClient {
             e.printStackTrace();
         }
 
-        System.out.println(authorize.getCode());
+        System.out.println(Objects.requireNonNull(authorize).getCode());
     }
 
     @NotNull

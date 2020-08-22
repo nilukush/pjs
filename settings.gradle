@@ -8,3 +8,4 @@
  */
 
 rootProject.name = 'pjs'
+enableFeaturePreview('STABLE_PUBLISHING')
